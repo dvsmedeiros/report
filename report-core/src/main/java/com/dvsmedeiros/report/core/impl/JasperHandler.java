@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -31,14 +33,15 @@ import net.sf.jasperreports.engine.util.JRLoader;
 @Component
 public class JasperHandler implements IReportHandler {
 	
-	private static final String DEFAULT_SUB_REPORT_DIR = GenerateReport.class.getClassLoader().getResource("templates").getPath();
+	private static final String DEFAULT_SUB_REPORT_DIR = GenerateReport.class.getClassLoader().getResource("templates").getPath().concat(File.separator);
 	
 	@Autowired
 	@Qualifier("configurationFacade")
 	private IConfigurationFacade config;
 	private String templatePath;
 	
-	public JasperHandler() {
+	@PostConstruct
+	public void init() {
 		this.templatePath = config.find(null, "SUB_REPORT_DIR", DEFAULT_SUB_REPORT_DIR).getValue();
 	}
 	
