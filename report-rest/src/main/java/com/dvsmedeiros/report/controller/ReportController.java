@@ -70,7 +70,7 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 			navigator.run(reportRequest, aCase);
 			ReportResponse report = aCase.getResult().getEntity();
 
-			if (report.getStatus().equals(ExecutionStatus.SUCESS) && report.getFile().length > 0) {
+			if (!aCase.getResult().hasError() && report.getStatus().equals(ExecutionStatus.SUCESS) && report.getFile().length > 0) {
 
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.parseMediaType("application/pdf"));
@@ -80,7 +80,7 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 				return ResponseEntity.ok().headers(headers).body(report.getFile());
 			}
 
-			if (report.getStatus().equals(ExecutionStatus.ERROR)) {
+			if (aCase.getResult().hasError() || report.getStatus().equals(ExecutionStatus.ERROR)) {
 				ResponseMessage responseMessage = new ResponseMessage(Boolean.TRUE, aCase.getResult().getMessage());
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 			}
