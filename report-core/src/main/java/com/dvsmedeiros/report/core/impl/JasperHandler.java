@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.dvsmedeiros.configuration.core.IConfigurationFacade;
+import com.dvsmedeiros.configuration.domain.Configuration;
 import com.dvsmedeiros.report.core.IReportHandler;
 import com.dvsmedeiros.report.core.business.impl.GenerateReport;
 import com.dvsmedeiros.report.domain.ExecutionStatus;
@@ -42,7 +44,7 @@ public class JasperHandler implements IReportHandler {
 	
 	@PostConstruct
 	public void init() {
-		this.templatePath = config.find(null, "SUB_REPORT_DIR", DEFAULT_SUB_REPORT_DIR).getValue();
+		config.find(null, "SUB_REPORT_DIR", DEFAULT_SUB_REPORT_DIR).ifPresent(config -> templatePath = config.getValue());		
 	}
 	
 	@Override

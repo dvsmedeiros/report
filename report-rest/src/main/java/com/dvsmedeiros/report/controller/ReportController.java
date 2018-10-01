@@ -1,5 +1,7 @@
 package com.dvsmedeiros.report.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -68,19 +70,19 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 
 			BusinessCase<IEntity> aCase = new BusinessCaseBuilder<>().withName("GENERATE_REPORT").build();
 			navigator.run(reportRequest, aCase);
-			ReportResponse report = aCase.getResult().getEntity();
-
-			if (!aCase.getResult().hasError() && report.getStatus().equals(ExecutionStatus.SUCESS) && report.getFile().length > 0) {
-
+			Optional<ReportResponse> report = aCase.getResult().getEntity();
+			
+			if (!aCase.getResult().hasError() && report.isPresent() && report.get().getStatus().equals(ExecutionStatus.SUCESS) && report.get().getFile().length > 0) {
+				
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.parseMediaType("application/pdf"));
-				headers.setContentDispositionFormData(report.getName(), report.getName());
+				headers.setContentDispositionFormData(report.get().getName(), report.get().getName());
 				headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
-				return ResponseEntity.ok().headers(headers).body(report.getFile());
+				return ResponseEntity.ok().headers(headers).body(report.get().getFile());
 			}
 
-			if (aCase.getResult().hasError() || report.getStatus().equals(ExecutionStatus.ERROR)) {
+			if (aCase.getResult().hasError() || !report.isPresent() || report.get().getStatus().equals(ExecutionStatus.ERROR)) {
 				ResponseMessage responseMessage = new ResponseMessage(Boolean.TRUE, aCase.getResult().getMessage());
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 			}
