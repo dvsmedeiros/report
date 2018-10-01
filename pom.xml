@@ -10,10 +10,22 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<url>https://github.com/dvsmedeiros/report</url>
 
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<spring.boot.version>2.0.5.RELEASE</spring.boot.version>
+    <jackson.version>2.8.6</jackson.version>
+    <jasper.version>6.6.0</jasper.version>
+		<bce.version>1.0.3-SNAPSHOT</bce.version>
+	</properties>
+
 	<modules>
 		<module>report-domain</module>
 		<module>report-core</module>
-		<module>report-rest</module>    
+		<module>report-rest</module>
 	</modules>
 
 </project>
