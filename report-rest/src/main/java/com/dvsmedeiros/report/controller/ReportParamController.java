@@ -7,7 +7,7 @@ import com.dvsmedeiros.report.domain.Param;
 import com.dvsmedeiros.rest.rest.controller.DomainEntityController;
 
 @Controller
-@RequestMapping("report/param")
+@RequestMapping("${server.controller.prefix}/report/param")
 public class ReportParamController extends DomainEntityController<Param> {
 
 	public ReportParamController() {

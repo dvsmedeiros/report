@@ -3,7 +3,6 @@ package com.dvsmedeiros.report.controller;
 import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dvsmedeiros.bce.core.controller.impl.BusinessCase;
 import com.dvsmedeiros.bce.core.controller.impl.BusinessCaseBuilder;
-import com.dvsmedeiros.bce.domain.IEntity;
 import com.dvsmedeiros.report.domain.ExecutionStatus;
 import com.dvsmedeiros.report.domain.Report;
 import com.dvsmedeiros.report.domain.ReportRequest;
@@ -24,7 +22,7 @@ import com.dvsmedeiros.rest.domain.ResponseMessage;
 import com.dvsmedeiros.rest.rest.controller.DomainSpecificEntityController;
 
 @Controller
-@RequestMapping("report")
+@RequestMapping("${server.controller.prefix}/report")
 public class ReportController extends DomainSpecificEntityController<Report> {
 
 	public ReportController() {
@@ -35,7 +33,7 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<?> createEntity(@RequestBody Report entity) {
 		ResponseEntity<?> response = super.createEntity(entity);
-		BusinessCase<?> aCase = BusinessCaseBuilder.withName("COMPILE_REPORT");
+		BusinessCase<?> aCase = new BusinessCaseBuilder<>().withName("COMPILE_REPORT");
 		navigator.run(entity, aCase);
 		if (!aCase.getResult().hasError()) {
 			return response;
@@ -47,7 +45,7 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody ResponseEntity<?> updateEntity(@RequestBody Report entity) {
 		ResponseEntity<?> response = super.updateEntity(entity);
-		BusinessCase<?> aCase = BusinessCaseBuilder.withName("COMPILE_REPORT");
+		BusinessCase<?> aCase = new BusinessCaseBuilder<Report>().withName("COMPILE_REPORT");
 		navigator.run(entity, aCase);
 		if (!aCase.getResult().hasError()) {
 			return response;
@@ -61,7 +59,7 @@ public class ReportController extends DomainSpecificEntityController<Report> {
 
 			reportRequest.getReport().setId(reportId);
 
-			BusinessCase<?> aCase = BusinessCaseBuilder.withName("GENERATE_REPORT");
+			BusinessCase<?> aCase = new BusinessCaseBuilder<Report>().withName("GENERATE_REPORT");
 			navigator.run(reportRequest, aCase);
 			Optional<ReportResponse> report = aCase.getResult().getEntity();
 			
