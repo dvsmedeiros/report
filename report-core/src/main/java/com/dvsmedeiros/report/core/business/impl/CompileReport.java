@@ -26,8 +26,7 @@ public class CompileReport implements IStrategy<Report> {
 	public void process(Report aEntity, INavigationCase<Report> aCase) {
 		IReportHandler handler = handlers.get(Format.JASPER);
 		if(handler == null) {
-			//aCase.suspendExecution("Handler para compilar formato: " + Format.JASPER.getExtension() + " inexistente ou inválido");
-			logger.error("Handler para compilar formato: " + Format.JASPER.getExtension() + " inexistente ou inválido");
+			aCase.suspendExecution("Handler para compilar formato: " + Format.JASPER.getExtension() + " inexistente ou inválido");			
 			return;
 		}
 		handler.compile();		
