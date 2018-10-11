@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import com.dvsmedeiros.bce.core.controller.IAdapter;
 import com.dvsmedeiros.bce.core.controller.impl.Navigation;
 import com.dvsmedeiros.bce.core.controller.impl.NavigationBuilder;
-import com.dvsmedeiros.bce.domain.DomainSpecificEntity;
 import com.dvsmedeiros.report.core.IReportHandler;
 import com.dvsmedeiros.report.core.business.impl.CompileReport;
 import com.dvsmedeiros.report.core.business.impl.FindReport;
 import com.dvsmedeiros.report.core.business.impl.GenerateReport;
 import com.dvsmedeiros.report.core.business.impl.ProcessParameters;
 import com.dvsmedeiros.report.core.business.impl.PutDefaultParameters;
+import com.dvsmedeiros.report.core.business.impl.SaveTemplateReport;
 import com.dvsmedeiros.report.domain.Format;
 import com.dvsmedeiros.report.domain.Param;
 import com.dvsmedeiros.report.domain.ParamType;
@@ -62,13 +62,15 @@ public class ReportNavigation {
 	
 	@Autowired
 	private CompileReport compileReport;
+	@Autowired
+	private SaveTemplateReport saveTemplate;
 	
 	@Bean(name = "reportHandler")
 	public Map<Format, IReportHandler> getReportExecutions() {
 		ConcurrentHashMap<Format, IReportHandler> executions = new ConcurrentHashMap<>();
 		executions.put(Format.PDF, jasper);
 		executions.put(Format.HTML, jasper);
-		executions.put(Format.HTML, jasper);
+		executions.put(Format.JASPER, jasper);
 		return executions;
 	}
 
@@ -101,6 +103,7 @@ public class ReportNavigation {
 	@Bean(name = "COMPILE_REPORT")
 	public Navigation<Report> compileReport() {
 		return new NavigationBuilder<Report>()
+				.next(saveTemplate)
 				.next(compileReport)
 				.build();
 	}

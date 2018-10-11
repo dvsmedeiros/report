@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import com.dvsmedeiros.configuration.core.IConfigurationFacade;
 import com.dvsmedeiros.report.core.IReportHandler;
-import com.dvsmedeiros.report.core.business.impl.GenerateReport;
 import com.dvsmedeiros.report.domain.ExecutionStatus;
 import com.dvsmedeiros.report.domain.FileExtention;
 import com.dvsmedeiros.report.domain.ReportRequest;
@@ -32,8 +31,6 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 @Component
 public class JasperHandler implements IReportHandler {
-	
-	private static final String DEFAULT_SUB_REPORT_DIR = GenerateReport.class.getClassLoader().getResource("templates").getPath().concat(File.separator);
 	
 	@Autowired
 	@Qualifier("configurationFacade")

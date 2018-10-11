@@ -17,6 +17,8 @@ public class Report extends DomainSpecificEntity {
 	private String title;
 	private String version;
 	@Transient
+	private Template template;
+	@Transient
 	private List<Param> params;
 
 	public String getName() {
@@ -49,6 +51,14 @@ public class Report extends DomainSpecificEntity {
 
 	public void setParams(List<Param> params) {
 		this.params = params;
+	}
+
+	public Template getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(Template template) {
+		this.template = template;
 	}
 
 }
